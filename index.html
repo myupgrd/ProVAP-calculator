@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myupgrd Income Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+            color: #000;
+            margin: 0;
+            padding: 20px;
+        }
+        .calculator-box {
+            max-width: 600px;
+            margin: auto;
+            border: 2px solid #000;
+            border-radius: 20px;
+            padding: 30px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            font-size: 16px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #ff006e;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #e60063;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f4f4f4;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-box">
+        <h2>myupgrd Income Calculator</h2>
+        <label>Monthly Personal Sales ($)</label>
+        <input type="number" id="personalSales" placeholder="e.g. 500">
+        <label>Directly Recruited Promoters</label>
+        <input type="number" id="directPromoters" placeholder="e.g. 5">
+        <label>Avg. Monthly Sales per Team Member ($)</label>
+        <input type="number" id="avgTeamSales" placeholder="e.g. 300">
+        <label>Avg. Promoters Sponsored per Team Member</label>
+        <input type="number" id="avgTeamRecruitment" placeholder="e.g. 2">
+        <label>Current ProVAP Rank</label>
+        <select id="rank">
+            <option value="1">Seed PROMOTER</option>
+            <option value="2">Blossom PROMOTER</option>
+            <option value="3">Sunflower LEGEND</option>
+            <option value="4">Rose LEGEND</option>
+            <option value="5">Palm LEGEND</option>
+            <option value="6">Bamboo LEGEND</option>
+            <option value="7">Oak LEGEND</option>
+            <option value="8">Oasis MAKER</option>
+            <option value="9">Grove MAKER</option>
+            <option value="10">Rainforest MAKER</option>
+            <option value="11">Legacy MASTER</option>
+            <option value="12">Visionary MASTER</option>
+            <option value="13">Crown MASTER</option>
+            <option value="14">Vanguard MASTER</option>
+            <option value="15">Ecosystem Guardian</option>
+        </select>
+        <label>Active Generations</label>
+        <input type="number" id="generations" placeholder="e.g. 3">
+        <button onclick="calculate()">Calculate</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculate() {
+            let sales = parseFloat(document.getElementById('personalSales').value) || 0;
+            let promoters = parseInt(document.getElementById('directPromoters').value) || 0;
+            let teamSales = parseFloat(document.getElementById('avgTeamSales').value) || 0;
+            let rank = parseInt(document.getElementById('rank').value);
+            let gen = parseInt(document.getElementById('generations').value) || 0;
+
+            let directRate = rank === 1 ? 0.15 : 0.30;
+            let growthRate = rank >= 2 ? 0.10 : 0.0;
+            let cycleBonus = rank >= 3 ? Math.floor((promoters * teamSales) / 1000) * 20 : 0;
+
+            let directCommission = sales * directRate;
+            let growthBonus = promoters * teamSales * growthRate;
+            let total = directCommission + growthBonus + cycleBonus;
+
+            document.getElementById('result').innerHTML = `
+                <strong>Estimated Monthly Earnings:</strong><br>
+                Direct Commission: $${directCommission.toFixed(2)}<br>
+                Growth Bonus: $${growthBonus.toFixed(2)}<br>
+                Cycle Bonus: $${cycleBonus.toFixed(2)}<br>
+                <hr><strong>Total: $${total.toFixed(2)}</strong>
+            `;
+        }
+    </script>
+</body>
+</html>
