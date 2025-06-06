@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,14 +47,19 @@
 <body>
   <div class="calculator-box">
     <h2>myupgrd Income Calculator</h2>
+    
     <label>Monthly Personal Sales ($)</label>
     <input type="number" id="personalSales" placeholder="e.g. 1000">
+
     <label>Directly Recruited Promoters</label>
     <input type="number" id="directPromoters" placeholder="e.g. 5">
+
     <label>Avg. Monthly Sales per Team Member ($)</label>
     <input type="number" id="avgTeamSales" placeholder="e.g. 1000">
+
     <label>Binary Team Depth (Levels)</label>
     <input type="number" id="binaryDepth" placeholder="e.g. 3">
+
     <label>Current ProVAP Rank</label>
     <select id="rank">
       <option value="1">Seed PROMOTER</option>
@@ -74,7 +78,9 @@
       <option value="14">Vanguard MASTER</option>
       <option value="15">Ecosystem Guardian</option>
     </select>
+
     <button onclick="calculate()">Calculate</button>
+
     <div class="result" id="result"></div>
   </div>
 
@@ -97,43 +103,4 @@
         8: { dc: 0.30, gb: 0.10, cb: true },
         9: { dc: 0.30, gb: 0.10, cb: true },
         10: { dc: 0.30, gb: 0.10, cb: true },
-        11: { dc: 0.30, gb: 0.10, cb: true },
-        12: { dc: 0.30, gb: 0.10, cb: true },
-        13: { dc: 0.30, gb: 0.10, cb: true },
-        14: { dc: 0.30, gb: 0.10, cb: true },
-        15: { dc: 0.30, gb: 0.10, cb: true }
-      };
-
-      const config = rankData[rank];
-      const directCommission = personalSales * config.dc;
-      const growthBonus = directPromoters * avgTeamSales * config.gb;
-
-      const binaryTeamSize = Math.pow(2, binaryDepth) - 1;
-      const leftTeam = Math.ceil(binaryTeamSize / 2);
-      const rightTeam = binaryTeamSize - leftTeam;
-
-      const leftSales = leftTeam * avgTeamSales;
-      const rightSales = rightTeam * avgTeamSales;
-
-      let teamBonus = 0;
-      if (config.cb) {
-        const cyclesLeft = Math.floor(leftSales / 400);
-        const cyclesRight = Math.floor(rightSales / 600);
-        teamBonus = Math.min(cyclesLeft, cyclesRight) * 20;
-      }
-
-      const total = directCommission + growthBonus + teamBonus;
-
-      document.getElementById("result").innerHTML = `
-        <strong>Estimated Monthly Earnings:</strong><br>
-        Direct Commission: $${directCommission.toFixed(2)}<br>
-        Growth Bonus: $${growthBonus.toFixed(2)}<br>
-        Team Bonus: $${teamBonus.toFixed(2)}<br>
-        <hr><strong>Total: $${total.toFixed(2)}</strong><br>
-        Binary Team Size: ${binaryTeamSize} (Left: ${leftTeam}, Right: ${rightTeam})
-      `;
-    }
-  </script>
-</body>
-</html>
-
+        11: { dc: 0.30, gb:
