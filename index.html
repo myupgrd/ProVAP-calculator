@@ -1,192 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>myupgrd Income Calculator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #ffffff;
-      color: #000;
-      margin: 0;
-      padding: 20px;
-    }
-    .calculator-box {
-      max-width: 600px;
-      margin: auto;
-      border: 2px solid #000;
-      border-radius: 20px;
-      padding: 30px;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      font-size: 16px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background-color: #ff006e;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #e60063;
-    }
-    .result {
-      margin-top: 20px;
-      padding: 15px;
-      background: #f4f4f4;
-      border-radius: 10px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>myupgrd Income Calculator</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+background: #ffffff;
+color: #000;
+margin: 0;
+padding: 20px;
+}
+.calculator-box {
+max-width: 600px;
+margin: auto;
+border: 2px solid #000;
+border-radius: 20px;
+padding: 30px;
+}
+input, select, button {
+width: 100%;
+padding: 12px;
+margin: 8px 0;
+font-size: 16px;
+border-radius: 10px;
+border: 1px solid #ccc;
+}
+button {
+background-color: #ff006e;
+color: white;
+border: none;
+cursor: pointer;
+}
+button:hover {
+background-color: #e60063;
+}
+.result {
+margin-top: 20px;
+padding: 15px;
+background: #f4f4f4;
+border-radius: 10px;
+}
+</style>
 </head>
 <body>
-  <div class="calculator-box">
-    <h2>myupgrd Income Calculator</h2>
+<div class="calculator-box">
+<h2>myupgrd Income Calculator</h2>
 
-    <label>Monthly Personal Sales ($)</label>
-    <input type="number" id="personalSales" placeholder="e.g. 1000">
+<label>Monthly Personal Sales ($)</label>
+<input type="number" id="personalSales" placeholder="e.g. 1000">
 
-    <label>Directly Recruited Promoters</label>
-    <input type="number" id="directPromoters" placeholder="e.g. 5">
+<label>Directly Recruited Promoters</label>
+<input type="number" id="directPromoters" placeholder="e.g. 5">
 
-    <label>Avg. Monthly Sales per Team Member ($)</label>
-    <input type="number" id="avgTeamSales" placeholder="e.g. 1000">
+<label>Avg. Monthly Sales per Team Member ($)</label>
+<input type="number" id="avgTeamSales" placeholder="e.g. 1000">
 
-    <label>Binary Team Depth (Levels)</label>
-    <input type="number" id="binaryDepth" placeholder="e.g. 3">
+<label>Binary Team Depth (Levels)</label>
+<input type="number" id="binaryDepth" placeholder="e.g. 3">
 
-    <label>Average Promoters Sponsored per Team Member</label>
-    <input type="number" id="avgSponsoredPerMember" placeholder="e.g. 2">
+<label>Average Promoters Sponsored per Team Member</label>
+<input type="number" id="avgSponsoredPerMember" placeholder="e.g. 2">
 
-    <label>Current ProVAP Rank</label>
-    <select id="rank">
-      <option value="1">Seed PROMOTER</option>
-      <option value="2">Blossom PROMOTER</option>
-      <option value="3">Sunflower LEGEND</option>
-      <option value="4">Rose LEGEND</option>
-      <option value="5">Palm LEGEND</option>
-      <option value="6">Bamboo LEGEND</option>
-      <option value="7">Oak LEGEND</option>
-      <option value="8">Oasis MAKER</option>
-      <option value="9">Grove MAKER</option>
-      <option value="10">Rainforest MAKER</option>
-      <option value="11">Legacy MASTER</option>
-      <option value="12">Visionary MASTER</option>
-      <option value="13">Crown MASTER</option>
-      <option value="15">Vanguard MASTER</option>
-    </select>
+<label>Current ProVAP Rank</label>
+<select id="rank">
+<option value="1">Seed PROMOTER</option>
+<option value="2">Blossom PROMOTER</option>
+<option value="3">Sunflower LEGEND</option>
+<option value="4">Rose LEGEND</option>
+<option value="5">Palm LEGEND</option>
+<option value="6">Bamboo LEGEND</option>
+<option value="7">Oak LEGEND</option>
+<option value="8">Oasis MAKER</option>
+<option value="9">Grove MAKER</option>
+<option value="10">Rainforest MAKER</option>
+<option value="11">Legacy MASTER</option>
+<option value="12">Visionary MASTER</option>
+<option value="13">Crown MASTER</option>
+<option value="15">Vanguard MASTER</option>
+</select>
 
-    <label>Estimated Global Monthly Revenue</label>
-    <select id="globalRevenue">
-      <option value="100000">$100,000</option>
-      <option value="250000">$250,000</option>
-      <option value="500000">$500,000</option>
-      <option value="1000000">$1,000,000</option>
-      <option value="2500000">$2,500,000</option>
-    </select>
+<label>Estimated Global Monthly Revenue</label>
+<select id="globalRevenue">
+<option value="100000">$100,000</option>
+<option value="250000">$250,000</option>
+<option value="500000">$500,000</option>
+<option value="1000000">$1,000,000</option>
+<option value="2500000">$2,500,000</option>
+</select>
 
-    <button onclick="calculate()">Calculate</button>
+<button onclick="calculate()">Calculate</button>
 
-    <div class="result" id="result"></div>
-  </div>
+<div class="result" id="result"></div>
+</div>
 
-  <script>
-    function formatUSD(value) {
-      return "$" + Math.floor(value).toLocaleString();
-    }
+<script>
+function formatUSD(value) {
+return "$" + Math.floor(value).toLocaleString();
+}
 
-    function calculate() {
-      const personalSales = parseFloat(document.getElementById("personalSales").value) || 0;
-      const directPromoters = parseInt(document.getElementById("directPromoters").value) || 0;
-      const avgTeamSales = parseFloat(document.getElementById("avgTeamSales").value) || 0;
-      const binaryDepth = parseInt(document.getElementById("binaryDepth").value) || 0;
-      const avgSponsoredPerMember = parseFloat(document.getElementById("avgSponsoredPerMember").value) || 1;
-      const rank = parseInt(document.getElementById("rank").value);
-      const globalRevenue = parseFloat(document.getElementById("globalRevenue").value) || 0;
-
-      const generationLevels = {
-        4: [0.20],
-        5: [0.20, 0.15],
-        6: [0.20, 0.15, 0.10],
-        7: [0.20, 0.15, 0.10, 0.05],
-        8: [0.20, 0.15, 0.10, 0.05, 0.05],
-        9: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05],
-        10: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
-        11: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
-        12: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
-        13: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
-        15: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05]
-      };
-
-      const legacyRevenueShare = {
-        11: 0.10,
-        12: 0.15,
-        13: 0.20,
-        15: 0.25
-      };
-
-      const directCommission = rank === 1 ? personalSales * 0.15 : personalSales * 0.30;
-      const growthBonus = rank >= 2 ? directPromoters * avgTeamSales * 0.10 : 0;
-
-      let teamBonus = 0;
-      if (rank >= 3) {
-        const binaryTeamSize = Math.pow(2, binaryDepth) - 1;
-        const leftTeam = Math.floor(binaryTeamSize / 2);
-        const rightTeam = binaryTeamSize - leftTeam;
-
-        const leftSales = leftTeam * avgTeamSales;
-        const rightSales = rightTeam * avgTeamSales;
-
-        const cyclesLeft = Math.floor(leftSales / 400);
-        const cyclesRight = Math.floor(rightSales / 600);
-        const cyclesUsed = Math.min(cyclesLeft, cyclesRight);
-        const cappedCycles = Math.min(cyclesUsed, 5000);
-        teamBonus = cappedCycles * 20;
+function animateValue(id, start, end, duration) {
+      if (end <= 0) {
+        document.getElementById(id).innerText = "$0";
+        return;
       }
+let range = end - start;
+let current = start;
+let increment = end > start ? 1 : -1;
+let stepTime = Math.abs(Math.floor(duration / range));
+let obj = document.getElementById(id);
+let timer = setInterval(function() {
+current += increment;
+obj.innerText = formatUSD(current);
+if (current == end) {
+clearInterval(timer);
+}
+}, stepTime);
+}
 
-      let generationBonus = 0;
-      const genLevels = generationLevels[rank] || [];
+function calculate() {
+const personalSales = parseFloat(document.getElementById("personalSales").value) || 0;
+const directPromoters = parseInt(document.getElementById("directPromoters").value) || 0;
+const avgTeamSales = parseFloat(document.getElementById("avgTeamSales").value) || 0;
+const binaryDepth = parseInt(document.getElementById("binaryDepth").value) || 0;
+const avgSponsoredPerMember = parseFloat(document.getElementById("avgSponsoredPerMember").value) || 1;
+const rank = parseInt(document.getElementById("rank").value);
+const globalRevenue = parseFloat(document.getElementById("globalRevenue").value) || 0;
 
-      function computeTeamBonus(depth) {
-        const teamSize = Math.pow(avgSponsoredPerMember, depth) - 1;
-        const left = Math.floor(teamSize / 2);
-        const right = teamSize - left;
-        const salesLeft = left * avgTeamSales;
-        const salesRight = right * avgTeamSales;
-        const cyclesL = Math.floor(salesLeft / 400);
-        const cyclesR = Math.floor(salesRight / 600);
-        const used = Math.min(cyclesL, cyclesR);
-        const capped = Math.min(used, 5000);
-        return Math.min(capped * 20, 100000);
-      }
+const generationLevels = {
+4: [0.20],
+5: [0.20, 0.15],
+6: [0.20, 0.15, 0.10],
+7: [0.20, 0.15, 0.10, 0.05],
+8: [0.20, 0.15, 0.10, 0.05, 0.05],
+9: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05],
+10: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
+11: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
+12: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
+13: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
+15: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05]
+};
 
-      for (let g = 0; g < genLevels.length; g++) {
-        const promotersAtGen = Math.pow(avgSponsoredPerMember, g);
-        for (let i = 0; i < promotersAtGen; i++) {
-          const availableDepth = binaryDepth - (g + 1);
-          const bonus = computeTeamBonus(availableDepth);
-          generationBonus += bonus * genLevels[g];
-        }
-      }
+const legacyRevenueShare = {
+11: 0.10,
+12: 0.15,
+13: 0.20,
+15: 0.25
+};
 
-      const legacyBonus = legacyRevenueShare[rank] ? globalRevenue * legacyRevenueShare[rank] : 0;
-      const total = directCommission + growthBonus + teamBonus + generationBonus + legacyBonus;
+const directCommission = personalSales * 0.30;
+const growthBonus = directPromoters * avgTeamSales * 0.10;
 
-      document.getElementById("result").innerHTML = `
-        <strong>Estimated Monthly Earnings:</strong><br>
-        Direct Commission: ${formatUSD(directCommission)}<br>
-        Growth Bonus: ${formatUSD(growthBonus)}<br>
-        Team Bonus (Capped at $100,000): ${formatUSD(teamBonus)}<br>
-        Generation Bonus: ${formatUSD(generationBonus)}<br>
-        Legacy Pool Bonus: ${formatUSD(legacyBonus)}<br>
-        <hr><strong>Total: ${formatUSD(total)}</strong>
-      `;
-    }
-  </script>
+const binaryTeamSize = Math.pow(2, binaryDepth) - 1;
+const leftTeam = Math.floor(binaryTeamSize / 2);
+const rightTeam = binaryTeamSize - leftTeam;
+
+const leftSales = leftTeam * avgTeamSales;
+const rightSales = rightTeam * avgTeamSales;
+
+const cyclesLeft = Math.floor(leftSales / 400);
+const cyclesRight = Math.floor(rightSales / 600);
+const cyclesUsed = Math.min(cyclesLeft, cyclesRight);
+const cappedCycles = Math.min(cyclesUsed, 5000);
+const teamBonus = cappedCycles * 20;
+
+let generationBonus = 0;
+const genLevels = generationLevels[rank] || [];
+
+function computeTeamBonus(depth) {
+const teamSize = Math.pow(avgSponsoredPerMember, depth) - 1;
+const left = Math.floor(teamSize / 2);
+const right = teamSize - left;
+const salesLeft = left * avgTeamSales;
+const salesRight = right * avgTeamSales;
+const cyclesL = Math.floor(salesLeft / 400);
+const cyclesR = Math.floor(salesRight / 600);
+const used = Math.min(cyclesL, cyclesR);
+const capped = Math.min(used, 5000);
+return Math.min(capped * 20, 100000);
+}
+
+for (let g = 0; g < genLevels.length; g++) {
+const promotersAtGen = Math.pow(avgSponsoredPerMember, g);
+for (let i = 0; i < promotersAtGen; i++) {
+const availableDepth = binaryDepth - (g + 1);
+const bonus = computeTeamBonus(availableDepth);
+generationBonus += bonus * genLevels[g];
+}
+}
+
+const legacyBonus = legacyRevenueShare[rank] ? globalRevenue * legacyRevenueShare[rank] : 0;
+const total = directCommission + growthBonus + teamBonus + generationBonus + legacyBonus;
+
+document.getElementById("result").innerHTML = `
+       <strong>Estimated Monthly Earnings:</strong><br>
+        Direct Commission: <span id="dc">${formatUSD(0)}</span><br>
+        Growth Bonus: <span id="gb">${formatUSD(0)}</span><br>
+        Team Bonus (Capped at $100,000): <span id="tb">${formatUSD(0)}</span><br>
+        Generation Bonus: <span id="genb">${formatUSD(0)}</span><br>
+        Legacy Pool Bonus: <span id="lb">${formatUSD(0)}</span><br>
+        <hr><strong>Total: <span id="tt">${formatUSD(0)}</span></strong>
+        Direct Commission: <span id="dc">$0</span><br>
+        Growth Bonus: <span id="gb">$0</span><br>
+        Team Bonus (Capped at $100,000): <span id="tb">$0</span><br>
+        Generation Bonus: <span id="genb">$0</span><br>
+        Legacy Pool Bonus: <span id="lb">$0</span><br>
+        <hr><strong>Total: <span id="tt">$0</span></strong>
+     `;
+
+animateValue("dc", 0, Math.floor(directCommission), 1000);
+animateValue("gb", 0, Math.floor(growthBonus), 1000);
+animateValue("tb", 0, Math.floor(teamBonus), 1000);
+animateValue("genb", 0, Math.floor(generationBonus), 1000);
+animateValue("lb", 0, Math.floor(legacyBonus), 1000);
+animateValue("tt", 0, Math.floor(total), 1000);
+}
+</script>
 </body>
 </html>
