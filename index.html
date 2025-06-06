@@ -103,4 +103,50 @@
         8: { dc: 0.30, gb: 0.10, cb: true },
         9: { dc: 0.30, gb: 0.10, cb: true },
         10: { dc: 0.30, gb: 0.10, cb: true },
-        11: { dc: 0.30, gb:
+        11: { dc: 0.30, gb: 0.10, cb: true },
+        12: { dc: 0.30, gb: 0.10, cb: true },
+        13: { dc: 0.30, gb: 0.10, cb: true },
+        14: { dc: 0.30, gb: 0.10, cb: true },
+        15: { dc: 0.30, gb: 0.10, cb: true }
+      };
+
+      const config = rankData[rank];
+      const directCommission = personalSales * config.dc;
+      const growthBonus = directPromoters * avgTeamSales * config.gb;
+
+      const binaryTeamSize = Math.pow(2, binaryDepth) - 1;
+      const leftTeam = Math.floor(binaryTeamSize / 2);
+      const rightTeam = binaryTeamSize - leftTeam;
+
+      const leftSales = leftTeam * avgTeamSales;
+      const rightSales = rightTeam * avgTeamSales;
+
+      let teamBonus = 0;
+      let cyclesUsed = 0;
+      let cappedCycles = 5000;
+
+      if (config.cb) {
+        const cyclesLeft = Math.floor(leftSales / 400);
+        const cyclesRight = Math.floor(rightSales / 600);
+        cyclesUsed = Math.min(cyclesLeft, cyclesRight);
+        cappedCycles = Math.min(cyclesUsed, 5000); // Apply cap
+        teamBonus = cappedCycles * 20;
+      }
+
+      const total = directCommission + growthBonus + teamBonus;
+
+      document.getElementById("result").innerHTML = `
+        <strong>Estimated Monthly Earnings:</strong><br>
+        Direct Commission: $${directCommission.toFixed(2)}<br>
+        Growth Bonus: $${growthBonus.toFixed(2)}<br>
+        Team Bonus (Capped at $100,000): $${teamBonus.toFixed(2)}<br>
+        <br>
+        Cycles Calculated: ${cyclesUsed}<br>
+        Cycles After Cap: ${cappedCycles}<br>
+        Binary Team Size: ${binaryTeamSize} (Left: ${leftTeam}, Right: ${rightTeam})<br>
+        <hr><strong>Total: $${total.toFixed(2)}</strong>
+      `;
+    }
+  </script>
+</body>
+</html>
