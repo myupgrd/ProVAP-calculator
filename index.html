@@ -96,6 +96,10 @@
   </div>
 
   <script>
+    function formatUSD(value) {
+      return "$" + Math.floor(value).toLocaleString();
+    }
+
     function calculate() {
       const personalSales = parseFloat(document.getElementById("personalSales").value) || 0;
       const directPromoters = parseInt(document.getElementById("directPromoters").value) || 0;
@@ -176,16 +180,16 @@
 
       document.getElementById("result").innerHTML = `
         <strong>Estimated Monthly Earnings:</strong><br>
-        Direct Commission: $${directCommission.toFixed(2)}<br>
-        Growth Bonus: $${growthBonus.toFixed(2)}<br>
-        Team Bonus (Capped at $100,000): $${teamBonus.toFixed(2)}<br>
-        Generation Bonus: $${generationBonus.toFixed(2)}<br>
-        Legacy Pool Bonus: $${legacyBonus.toFixed(2)}<br>
+        Direct Commission: ${formatUSD(directCommission)}<br>
+        Growth Bonus: ${formatUSD(growthBonus)}<br>
+        Team Bonus (Capped at $100,000): ${formatUSD(teamBonus)}<br>
+        Generation Bonus: ${formatUSD(generationBonus)}<br>
+        Legacy Pool Bonus: ${formatUSD(legacyBonus)}<br>
         <br>
         Cycles Calculated: ${cyclesUsed}<br>
         Cycles After Cap: ${cappedCycles}<br>
         Binary Team Size: ${binaryTeamSize} (Left: ${leftTeam}, Right: ${rightTeam})<br>
-        <hr><strong>Total: $${total.toFixed(2)}</strong>
+        <hr><strong>Total: ${formatUSD(total)}</strong>
       `;
     }
   </script>
