@@ -131,20 +131,23 @@
       };
 
       const directCommission = rank === 1 ? personalSales * 0.15 : personalSales * 0.30;
-      const growthBonus = rank > 1 ? directPromoters * avgTeamSales * 0.10 : 0;
+      const growthBonus = rank >= 2 ? directPromoters * avgTeamSales * 0.10 : 0;
 
-      const binaryTeamSize = Math.pow(2, binaryDepth) - 1;
-      const leftTeam = Math.floor(binaryTeamSize / 2);
-      const rightTeam = binaryTeamSize - leftTeam;
+      let teamBonus = 0;
+      if (rank >= 3) {
+        const binaryTeamSize = Math.pow(2, binaryDepth) - 1;
+        const leftTeam = Math.floor(binaryTeamSize / 2);
+        const rightTeam = binaryTeamSize - leftTeam;
 
-      const leftSales = leftTeam * avgTeamSales;
-      const rightSales = rightTeam * avgTeamSales;
+        const leftSales = leftTeam * avgTeamSales;
+        const rightSales = rightTeam * avgTeamSales;
 
-      const cyclesLeft = Math.floor(leftSales / 400);
-      const cyclesRight = Math.floor(rightSales / 600);
-      const cyclesUsed = Math.min(cyclesLeft, cyclesRight);
-      const cappedCycles = Math.min(cyclesUsed, 5000);
-      const teamBonus = rank > 1 ? cappedCycles * 20 : 0;
+        const cyclesLeft = Math.floor(leftSales / 400);
+        const cyclesRight = Math.floor(rightSales / 600);
+        const cyclesUsed = Math.min(cyclesLeft, cyclesRight);
+        const cappedCycles = Math.min(cyclesUsed, 5000);
+        teamBonus = cappedCycles * 20;
+      }
 
       let generationBonus = 0;
       const genLevels = generationLevels[rank] || [];
