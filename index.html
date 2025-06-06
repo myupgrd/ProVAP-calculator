@@ -105,7 +105,7 @@
 
     function updateBinaryTeamSize() {
       const binaryDepth = parseInt(document.getElementById("binaryDepth").value) || 0;
-      const teamSize = Math.pow(2, binaryDepth) - 1;
+      const teamSize = Math.pow(2, binaryDepth + 1) - 2;
       document.getElementById("binaryTeamSizeDisplay").value = teamSize.toLocaleString();
     }
 
