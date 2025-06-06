@@ -58,7 +58,10 @@
     <input type="number" id="avgTeamSales" placeholder="e.g. 1000">
 
     <label>Team Levels Below You (Binary System)</label>
-    <input type="number" id="binaryDepth" placeholder="e.g. 3">
+    <input type="number" id="binaryDepth" placeholder="e.g. 3" oninput="updateBinaryTeamSize()">
+
+    <label>People in Your Binary Team</label>
+    <input type="text" id="binaryTeamSizeDisplay" readonly>
 
     <label>Average Promoters Recruited by Each Team Member</label>
     <input type="number" id="avgSponsoredPerMember" placeholder="e.g. 2">
@@ -98,6 +101,12 @@
   <script>
     function formatUSD(value) {
       return "$" + Math.floor(value).toLocaleString();
+    }
+
+    function updateBinaryTeamSize() {
+      const binaryDepth = parseInt(document.getElementById("binaryDepth").value) || 0;
+      const teamSize = Math.pow(2, binaryDepth) - 1;
+      document.getElementById("binaryTeamSizeDisplay").value = teamSize.toLocaleString();
     }
 
     function calculate() {
