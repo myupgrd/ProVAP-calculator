@@ -100,25 +100,6 @@
       return "$" + Math.floor(value).toLocaleString();
     }
 
-    function animateValue(id, start, end, duration) {
-      if (end <= 0) {
-        document.getElementById(id).innerText = "$0";
-        return;
-      }
-      let range = end - start;
-      let current = start;
-      let increment = end > start ? 1 : -1;
-      let stepTime = Math.abs(Math.floor(duration / range));
-      let obj = document.getElementById(id);
-      let timer = setInterval(function() {
-        current += increment;
-        obj.innerText = formatUSD(current);
-        if (current == end) {
-          clearInterval(timer);
-        }
-      }, stepTime);
-    }
-
     function calculate() {
       const personalSales = parseFloat(document.getElementById("personalSales").value) || 0;
       const directPromoters = parseInt(document.getElementById("directPromoters").value) || 0;
@@ -195,20 +176,13 @@
 
       document.getElementById("result").innerHTML = `
         <strong>Estimated Monthly Earnings:</strong><br>
-        Direct Commission: <span id="dc">$0</span><br>
-        Growth Bonus: <span id="gb">$0</span><br>
-        Team Bonus (Capped at $100,000): <span id="tb">$0</span><br>
-        Generation Bonus: <span id="genb">$0</span><br>
-        Legacy Pool Bonus: <span id="lb">$0</span><br>
-        <hr><strong>Total: <span id="tt">$0</span></strong>
+        Direct Commission: ${formatUSD(directCommission)}<br>
+        Growth Bonus: ${formatUSD(growthBonus)}<br>
+        Team Bonus (Capped at $100,000): ${formatUSD(teamBonus)}<br>
+        Generation Bonus: ${formatUSD(generationBonus)}<br>
+        Legacy Pool Bonus: ${formatUSD(legacyBonus)}<br>
+        <hr><strong>Total: ${formatUSD(total)}</strong>
       `;
-
-      animateValue("dc", 0, Math.floor(directCommission), 1000);
-      animateValue("gb", 0, Math.floor(growthBonus), 1000);
-      animateValue("tb", 0, Math.floor(teamBonus), 1000);
-      animateValue("genb", 0, Math.floor(generationBonus), 1000);
-      animateValue("lb", 0, Math.floor(legacyBonus), 1000);
-      animateValue("tt", 0, Math.floor(total), 1000);
     }
   </script>
 </body>
