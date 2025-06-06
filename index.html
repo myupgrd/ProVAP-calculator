@@ -174,12 +174,14 @@
         return Math.min(capped * 20, 100000);
       }
 
-      for (let g = 0; g < genLevels.length; g++) {
-        const promotersAtGen = Math.pow(avgSponsoredPerMember, g);
-        for (let i = 0; i < promotersAtGen; i++) {
-          const availableDepth = binaryDepth - (g + 1);
-          const bonus = computeTeamBonus(availableDepth);
-          generationBonus += bonus * genLevels[g];
+      if (directPromoters > 0) {
+        for (let g = 0; g < genLevels.length; g++) {
+          const promotersAtGen = Math.pow(avgSponsoredPerMember, g);
+          for (let i = 0; i < promotersAtGen; i++) {
+            const availableDepth = binaryDepth - (g + 1);
+            const bonus = computeTeamBonus(availableDepth);
+            generationBonus += bonus * genLevels[g];
+          }
         }
       }
 
