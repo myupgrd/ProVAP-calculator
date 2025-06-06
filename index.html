@@ -60,6 +60,9 @@
     <label>Binary Team Depth (Levels)</label>
     <input type="number" id="binaryDepth" placeholder="e.g. 3">
 
+    <label>Average Promoters Sponsored per Team Member</label>
+    <input type="number" id="avgSponsoredPerMember" placeholder="e.g. 2">
+
     <label>Current ProVAP Rank</label>
     <select id="rank">
       <option value="1">Seed PROMOTER</option>
@@ -75,8 +78,7 @@
       <option value="11">Legacy MASTER</option>
       <option value="12">Visionary MASTER</option>
       <option value="13">Crown MASTER</option>
-      <option value="14">Vanguard MASTER</option>
-      <option value="15">Ecosystem Guardian</option>
+      <option value="15">Vanguard MASTER</option>
     </select>
 
     <button onclick="calculate()">Calculate</button>
@@ -90,29 +92,25 @@
       const directPromoters = parseInt(document.getElementById("directPromoters").value) || 0;
       const avgTeamSales = parseFloat(document.getElementById("avgTeamSales").value) || 0;
       const binaryDepth = parseInt(document.getElementById("binaryDepth").value) || 0;
+      const avgSponsoredPerMember = parseFloat(document.getElementById("avgSponsoredPerMember").value) || 1;
       const rank = parseInt(document.getElementById("rank").value);
 
-      const rankData = {
-        1: { dc: 0.15, gb: 0.00, cb: false, genBonus: 0 },
-        2: { dc: 0.30, gb: 0.10, cb: false, genBonus: 0 },
-        3: { dc: 0.30, gb: 0.10, cb: true, genBonus: 0 },
-        4: { dc: 0.30, gb: 0.10, cb: true, genBonus: 0.20 },
-        5: { dc: 0.30, gb: 0.10, cb: true, genBonus: 0.20 },
-        6: { dc: 0.30, gb: 0.10, cb: true, genBonus: 0.20 },
-        7: { dc: 0.30, gb: 0.10, cb: true, genBonus: 0.20 },
-        8: { dc: 0.30, gb: 0.10, cb: true, genBonus: 0.20 },
-        9: { dc: 0.30, gb: 0.10, cb: true, genBonus: 0.20 },
-        10: { dc: 0.30, gb: 0.10, cb: true, genBonus: 0.20 },
-        11: { dc: 0.30, gb: 0.10, cb: true, genBonus: 0.20 },
-        12: { dc: 0.30, gb: 0.10, cb: true, genBonus: 0.20 },
-        13: { dc: 0.30, gb: 0.10, cb: true, genBonus: 0.20 },
-        14: { dc: 0.30, gb: 0.10, cb: true, genBonus: 0.20 },
-        15: { dc: 0.30, gb: 0.10, cb: true, genBonus: 0.20 }
+      const generationLevels = {
+        4: [0.20],
+        5: [0.20, 0.15],
+        6: [0.20, 0.15, 0.10],
+        7: [0.20, 0.15, 0.10, 0.05],
+        8: [0.20, 0.15, 0.10, 0.05, 0.05],
+        9: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05],
+        10: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
+        11: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
+        12: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
+        13: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
+        15: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05]
       };
 
-      const config = rankData[rank];
-      const directCommission = personalSales * config.dc;
-      const growthBonus = directPromoters * avgTeamSales * config.gb;
+      const directCommission = personalSales * 0.30;
+      const growthBonus = directPromoters * avgTeamSales * 0.10;
 
       const binaryTeamSize = Math.pow(2, binaryDepth) - 1;
       const leftTeam = Math.floor(binaryTeamSize / 2);
@@ -125,30 +123,35 @@
       let cyclesUsed = 0;
       let cappedCycles = 5000;
 
-      if (config.cb) {
-        const cyclesLeft = Math.floor(leftSales / 400);
-        const cyclesRight = Math.floor(rightSales / 600);
-        cyclesUsed = Math.min(cyclesLeft, cyclesRight);
-        cappedCycles = Math.min(cyclesUsed, 5000);
-        teamBonus = cappedCycles * 20;
+      const cyclesLeft = Math.floor(leftSales / 400);
+      const cyclesRight = Math.floor(rightSales / 600);
+      cyclesUsed = Math.min(cyclesLeft, cyclesRight);
+      cappedCycles = Math.min(cyclesUsed, 5000);
+      teamBonus = cappedCycles * 20;
+
+      // Generation Bonus
+      let generationBonus = 0;
+      const genLevels = generationLevels[rank] || [];
+
+      function computeTeamBonus(depth) {
+        const teamSize = Math.pow(avgSponsoredPerMember, depth) - 1;
+        const left = Math.floor(teamSize / 2);
+        const right = teamSize - left;
+        const salesLeft = left * avgTeamSales;
+        const salesRight = right * avgTeamSales;
+        const cyclesL = Math.floor(salesLeft / 400);
+        const cyclesR = Math.floor(salesRight / 600);
+        const used = Math.min(cyclesL, cyclesR);
+        const capped = Math.min(used, 5000);
+        return Math.min(capped * 20, 100000);
       }
 
-      // Generation Bonus calculation based on capped team bonus of directly recruited promoters
-      let generationBonus = 0;
-      if (config.genBonus > 0 && directPromoters > 0) {
-        for (let i = 1; i <= directPromoters; i++) {
-          let depthBelow = binaryDepth - (i <= 2 ? 1 : 2);
-          const teamSize = Math.pow(2, depthBelow) - 1;
-          const l = Math.floor(teamSize / 2);
-          const r = teamSize - l;
-          const salesL = l * avgTeamSales;
-          const salesR = r * avgTeamSales;
-          const cl = Math.floor(salesL / 400);
-          const cr = Math.floor(salesR / 600);
-          const used = Math.min(cl, cr);
-          const cap = Math.min(used, 5000);
-          const teamBonusEach = Math.min(cap * 20, 100000);
-          generationBonus += teamBonusEach * config.genBonus;
+      for (let g = 0; g < genLevels.length; g++) {
+        const promotersAtGen = Math.pow(avgSponsoredPerMember, g);
+        for (let i = 0; i < promotersAtGen; i++) {
+          const availableDepth = binaryDepth - (g + 1);
+          const bonus = computeTeamBonus(availableDepth);
+          generationBonus += bonus * genLevels[g];
         }
       }
 
