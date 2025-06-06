@@ -81,6 +81,15 @@
       <option value="15">Vanguard MASTER</option>
     </select>
 
+    <label>Estimated Global Monthly Revenue</label>
+    <select id="globalRevenue">
+      <option value="100000">$100,000</option>
+      <option value="250000">$250,000</option>
+      <option value="500000">$500,000</option>
+      <option value="1000000">$1,000,000</option>
+      <option value="2500000">$2,500,000</option>
+    </select>
+
     <button onclick="calculate()">Calculate</button>
 
     <div class="result" id="result"></div>
@@ -94,6 +103,7 @@
       const binaryDepth = parseInt(document.getElementById("binaryDepth").value) || 0;
       const avgSponsoredPerMember = parseFloat(document.getElementById("avgSponsoredPerMember").value) || 1;
       const rank = parseInt(document.getElementById("rank").value);
+      const globalRevenue = parseFloat(document.getElementById("globalRevenue").value) || 0;
 
       const generationLevels = {
         4: [0.20],
@@ -107,6 +117,13 @@
         12: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
         13: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
         15: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05]
+      };
+
+      const legacyRevenueShare = {
+        11: 0.10,
+        12: 0.15,
+        13: 0.20,
+        15: 0.25
       };
 
       const directCommission = personalSales * 0.30;
@@ -129,7 +146,6 @@
       cappedCycles = Math.min(cyclesUsed, 5000);
       teamBonus = cappedCycles * 20;
 
-      // Generation Bonus
       let generationBonus = 0;
       const genLevels = generationLevels[rank] || [];
 
@@ -155,7 +171,8 @@
         }
       }
 
-      const total = directCommission + growthBonus + teamBonus + generationBonus;
+      const legacyBonus = legacyRevenueShare[rank] ? globalRevenue * legacyRevenueShare[rank] : 0;
+      const total = directCommission + growthBonus + teamBonus + generationBonus + legacyBonus;
 
       document.getElementById("result").innerHTML = `
         <strong>Estimated Monthly Earnings:</strong><br>
@@ -163,6 +180,7 @@
         Growth Bonus: $${growthBonus.toFixed(2)}<br>
         Team Bonus (Capped at $100,000): $${teamBonus.toFixed(2)}<br>
         Generation Bonus: $${generationBonus.toFixed(2)}<br>
+        Legacy Pool Bonus: $${legacyBonus.toFixed(2)}<br>
         <br>
         Cycles Calculated: ${cyclesUsed}<br>
         Cycles After Cap: ${cappedCycles}<br>
