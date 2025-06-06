@@ -133,11 +133,11 @@
         teamBonus = cappedCycles * 20;
       }
 
-      // Generation Bonus calculation based on team bonus of directly recruited promoters
+      // Generation Bonus calculation based on capped team bonus of directly recruited promoters
       let generationBonus = 0;
       if (config.genBonus > 0 && directPromoters > 0) {
         for (let i = 1; i <= directPromoters; i++) {
-          let depthBelow = binaryDepth - (i <= 2 ? 1 : 2); // First two have 9, rest have 8 below
+          let depthBelow = binaryDepth - (i <= 2 ? 1 : 2);
           const teamSize = Math.pow(2, depthBelow) - 1;
           const l = Math.floor(teamSize / 2);
           const r = teamSize - l;
@@ -147,7 +147,7 @@
           const cr = Math.floor(salesR / 600);
           const used = Math.min(cl, cr);
           const cap = Math.min(used, 5000);
-          const teamBonusEach = cap * 20;
+          const teamBonusEach = Math.min(cap * 20, 100000);
           generationBonus += teamBonusEach * config.genBonus;
         }
       }
