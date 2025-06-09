@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>myupgrd Commission Widget</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+    body { font-family: Arial, sans-serif; background-color: #ffffff; color: #000000; max-width: 700px; margin: 40px auto; padding: 20px; border: 2px solid #ff006e; border-radius: 12px; }
     label { display: block; margin-top: 10px; font-weight: bold; }
-    input, select { width: 100%; padding: 8px; margin-top: 5px; }
-    .summary { margin-top: 20px; background: #f5f5f5; padding: 15px; border-radius: 5px; }
+    input, select { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; }
+    .summary { margin-top: 20px; background: #f5f5f5; padding: 15px; border-radius: 8px; border: 1px solid #ff006e; }
     .summary div { margin-bottom: 8px; }
   </style>
 </head>
@@ -32,6 +32,8 @@
     <div>Direct Commissions: $<span id="directCommission">0.00</span></div>
     <div>Growth Bonus: $<span id="growthBonus">0.00</span></div>
     <div>Team Bonus: $<span id="teamBonus">0.00</span></div>
+    <div>Generation Bonus: $<span id="generationBonus">0.00</span></div>
+    <div>Legacy Pool: $<span id="legacyPool">0.00</span></div>
     <div><strong>Total Commission: $<span id="total">0.00</span></strong></div>
   </div>
 
@@ -44,15 +46,18 @@
     ];
 
     const directCommissionRates = { "Seed PROMOTER": 0.15, default: 0.3 };
-
-    const growthBonusEligibility = ranks.slice(1); // all except Seed
-
+    const growthBonusEligibility = ranks.slice(1);
     const binaryLevels = {
       "Seed PROMOTER": 0,"Blossom PROMOTER": 1,"Sunflower LEGEND": 3,
       "Rose LEGEND": 5,"Palm LEGEND": 6,"Bamboo LEGEND": 7,"Oak LEGEND": 8,
       "Oasis MAKER": 9,"Grove MAKER": 10,"Rainforest MAKER": 11,
       "Legacy MASTER": 13,"Visionary MASTER": 14,"Crown MASTER": 15,
       "Vanguard MASTER": 16,"Ecosystem GUARDIAN": 17
+    };
+
+    const legacyPoolShares = {
+      "Legacy MASTER": 0.1, "Visionary MASTER": 0.15, "Crown MASTER": 0.2,
+      "Vanguard MASTER": 0.25, "Ecosystem GUARDIAN": 0.3
     };
 
     function calculateBinaryTeamSize(levels) {
@@ -64,15 +69,40 @@
     function calculateTeamBonus(rank, avgSales) {
       const levels = binaryLevels[rank];
       if (levels <= 1) return 0;
-
       const teamSize = calculateBinaryTeamSize(levels);
       const left = teamSize / 2;
       const right = teamSize / 2;
-
       const rightCycles = (right * avgSales) / 600;
       const leftCycles = (left * avgSales) / 400;
       const cycles = Math.floor(Math.min(rightCycles, leftCycles));
       return Math.min(cycles, 5000) * 20;
+    }
+
+    function calculateGenerationBonus(rank, promoters, avgSales) {
+      const levels = binaryLevels[rank];
+      if (levels < 5) return 0;
+      const percentages = [0.2, 0.15, 0.1, 0.05, 0.05, 0.05, 0.05];
+      let genTotal = 0;
+      let teamBonusPer = [];
+      for (let i = 1; i <= 7; i++) {
+        const levelDepth = levels - i;
+        if (levelDepth < 1) break;
+        const teamSize = Math.min(calculateBinaryTeamSize(levelDepth) / 2, 5000);
+        teamBonusPer[i - 1] = teamSize * 20;
+      }
+      let members = promoters;
+      for (let i = 0; i < teamBonusPer.length; i++) {
+        genTotal += members * teamBonusPer[i] * percentages[i];
+        members *= 2;
+      }
+      return genTotal;
+    }
+
+    function calculateLegacyPool(rank, avgSales) {
+      if (!legacyPoolShares[rank]) return 0;
+      const teamSize = calculateBinaryTeamSize(binaryLevels[rank]);
+      const totalRevenue = teamSize * avgSales;
+      return totalRevenue * 0.05 * legacyPoolShares[rank];
     }
 
     function calculateCommission(sales, promoters, avgSales, rank) {
@@ -80,8 +110,10 @@
       const directCommission = sales * directRate;
       const growthBonus = growthBonusEligibility.includes(rank) ? promoters * avgSales * 0.1 : 0;
       const teamBonus = calculateTeamBonus(rank, avgSales);
-      const total = directCommission + growthBonus + teamBonus;
-      return { directCommission, growthBonus, teamBonus, total };
+      const generationBonus = calculateGenerationBonus(rank, promoters, avgSales);
+      const legacyPool = calculateLegacyPool(rank, avgSales);
+      const total = directCommission + growthBonus + teamBonus + generationBonus + legacyPool;
+      return { directCommission, growthBonus, teamBonus, generationBonus, legacyPool, total };
     }
 
     function updateOutputs() {
@@ -94,6 +126,8 @@
       document.getElementById("directCommission").innerText = result.directCommission.toFixed(2);
       document.getElementById("growthBonus").innerText = result.growthBonus.toFixed(2);
       document.getElementById("teamBonus").innerText = result.teamBonus.toFixed(2);
+      document.getElementById("generationBonus").innerText = result.generationBonus.toFixed(2);
+      document.getElementById("legacyPool").innerText = result.legacyPool.toFixed(2);
       document.getElementById("total").innerText = result.total.toFixed(2);
     }
 
@@ -109,8 +143,7 @@
       option.textContent = r;
       rankSelect.appendChild(option);
     });
-    rankSelect.value = ranks[0]; // default value
-
+    rankSelect.value = ranks[0];
     updateOutputs();
   </script>
 </body>
