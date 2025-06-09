@@ -1,1 +1,117 @@
-<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQOJ1788sugFsh1EVo5qwi6Cbi_OI3NNwz5ehirM0L0VWansWY0yoPN9vZX_7FfyhjIFgQ8G77Bb5tb/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myupgrd Commission Widget</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input, select { width: 100%; padding: 8px; margin-top: 5px; }
+    .summary { margin-top: 20px; background: #f5f5f5; padding: 15px; border-radius: 5px; }
+    .summary div { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <h2>myupgrd Commission Calculator</h2>
+
+  <label for="sales">Your Monthly Product Sales ($)</label>
+  <input type="number" id="sales" placeholder="Enter amount in USD" />
+
+  <label for="promoters">Promoters You Invited Directly</label>
+  <input type="number" id="promoters" placeholder="Number of promoters" />
+
+  <label for="avgSales">Average Sales Per Team Member ($)</label>
+  <input type="number" id="avgSales" placeholder="Enter amount in USD" />
+
+  <label for="rank">Select Your Current myupgrd Rank</label>
+  <select id="rank"></select>
+
+  <div class="summary">
+    <h3>Summary</h3>
+    <div>Direct Commissions: $<span id="directCommission">0.00</span></div>
+    <div>Growth Bonus: $<span id="growthBonus">0.00</span></div>
+    <div>Team Bonus: $<span id="teamBonus">0.00</span></div>
+    <div><strong>Total Commission: $<span id="total">0.00</span></strong></div>
+  </div>
+
+  <script>
+    const ranks = [
+      "Seed PROMOTER","Blossom PROMOTER","Sunflower LEGEND","Rose LEGEND",
+      "Palm LEGEND","Bamboo LEGEND","Oak LEGEND","Oasis MAKER",
+      "Grove MAKER","Rainforest MAKER","Legacy MASTER","Visionary MASTER",
+      "Crown MASTER","Vanguard MASTER","Ecosystem GUARDIAN"
+    ];
+
+    const directCommissionRates = { "Seed PROMOTER": 0.15, default: 0.3 };
+
+    const growthBonusEligibility = ranks.slice(1); // all except Seed
+
+    const binaryLevels = {
+      "Seed PROMOTER": 0,"Blossom PROMOTER": 1,"Sunflower LEGEND": 3,
+      "Rose LEGEND": 5,"Palm LEGEND": 6,"Bamboo LEGEND": 7,"Oak LEGEND": 8,
+      "Oasis MAKER": 9,"Grove MAKER": 10,"Rainforest MAKER": 11,
+      "Legacy MASTER": 13,"Visionary MASTER": 14,"Crown MASTER": 15,
+      "Vanguard MASTER": 16,"Ecosystem GUARDIAN": 17
+    };
+
+    function calculateBinaryTeamSize(levels) {
+      let total = 0;
+      for (let i = 1; i <= levels; i++) total += 2 ** i;
+      return total;
+    }
+
+    function calculateTeamBonus(rank, avgSales) {
+      const levels = binaryLevels[rank];
+      if (levels <= 1) return 0;
+
+      const teamSize = calculateBinaryTeamSize(levels);
+      const left = teamSize / 2;
+      const right = teamSize / 2;
+
+      const rightCycles = (right * avgSales) / 600;
+      const leftCycles = (left * avgSales) / 400;
+      const cycles = Math.floor(Math.min(rightCycles, leftCycles));
+      return Math.min(cycles, 5000) * 20;
+    }
+
+    function calculateCommission(sales, promoters, avgSales, rank) {
+      const directRate = rank === "Seed PROMOTER" ? directCommissionRates[rank] : directCommissionRates.default;
+      const directCommission = sales * directRate;
+      const growthBonus = growthBonusEligibility.includes(rank) ? promoters * avgSales * 0.1 : 0;
+      const teamBonus = calculateTeamBonus(rank, avgSales);
+      const total = directCommission + growthBonus + teamBonus;
+      return { directCommission, growthBonus, teamBonus, total };
+    }
+
+    function updateOutputs() {
+      const sales = parseFloat(document.getElementById("sales").value) || 0;
+      const promoters = parseInt(document.getElementById("promoters").value) || 0;
+      const avgSales = parseFloat(document.getElementById("avgSales").value) || 0;
+      const rank = document.getElementById("rank").value;
+
+      const result = calculateCommission(sales, promoters, avgSales, rank);
+      document.getElementById("directCommission").innerText = result.directCommission.toFixed(2);
+      document.getElementById("growthBonus").innerText = result.growthBonus.toFixed(2);
+      document.getElementById("teamBonus").innerText = result.teamBonus.toFixed(2);
+      document.getElementById("total").innerText = result.total.toFixed(2);
+    }
+
+    document.getElementById("sales").addEventListener("input", updateOutputs);
+    document.getElementById("promoters").addEventListener("input", updateOutputs);
+    document.getElementById("avgSales").addEventListener("input", updateOutputs);
+    document.getElementById("rank").addEventListener("change", updateOutputs);
+
+    const rankSelect = document.getElementById("rank");
+    ranks.forEach(r => {
+      const option = document.createElement("option");
+      option.value = r;
+      option.textContent = r;
+      rankSelect.appendChild(option);
+    });
+    rankSelect.value = ranks[0]; // default value
+
+    updateOutputs();
+  </script>
+</body>
+</html>
