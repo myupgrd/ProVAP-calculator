@@ -2,202 +2,130 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>myupgrd Income Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commission Calculator</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #ffffff;
-      color: #000;
-      margin: 0;
-      padding: 20px;
-    }
-    .calculator-box {
-      max-width: 600px;
-      margin: auto;
-      border: 2px solid #000;
-      border-radius: 20px;
-      padding: 30px;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      font-size: 16px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background-color: #ff006e;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #e60063;
-    }
-    .result {
-      margin-top: 20px;
-      padding: 15px;
-      background: #f4f4f4;
-      border-radius: 10px;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    h2 { margin-top: 30px; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    input, select { width: 100%; padding: 8px; }
+    .result { font-weight: bold; margin-top: 10px; }
   </style>
 </head>
 <body>
-  <div class="calculator-box">
-    <h2>Check Your Opportunity</h2>
+  <h1>Commission Calculator</h1>
 
-    <label>Your Monthly Product Sales ($)</label>
-    <input type="number" id="personalSales" placeholder="e.g. 1000">
-
-    <label>Promoters You Invited Directly</label>
-    <input type="number" id="directPromoters" placeholder="e.g. 5">
-
-    <label>Average Sales Per Team Member ($)</label>
-    <input type="number" id="avgTeamSales" placeholder="e.g. 1000">
-
-    <label>Team Levels Below You (Binary System)</label>
-    <input type="number" id="binaryDepth" placeholder="e.g. 3" oninput="updateBinaryTeamSize()">
-
-    <label>People in Your Binary Team</label>
-    <input type="text" id="binaryTeamSizeDisplay" readonly>
-
-    <label>Average Promoters Recruited by Each Team Member</label>
-    <input type="number" id="avgSponsoredPerMember" placeholder="e.g. 2">
-
-    <label>Select Your Current myupgrd Rank</label>
-    <select id="rank">
-      <option value="1">Seed PROMOTER</option>
-      <option value="2">Blossom PROMOTER</option>
-      <option value="3">Sunflower LEGEND</option>
-      <option value="4">Rose LEGEND</option>
-      <option value="5">Palm LEGEND</option>
-      <option value="6">Bamboo LEGEND</option>
-      <option value="7">Oak LEGEND</option>
-      <option value="8">Oasis MAKER</option>
-      <option value="9">Grove MAKER</option>
-      <option value="10">Rainforest MAKER</option>
-      <option value="11">Legacy MASTER</option>
-      <option value="12">Visionary MASTER</option>
-      <option value="13">Crown MASTER</option>
-      <option value="15">Vanguard MASTER</option>
-    </select>
-
-    <label>Estimated Total Monthly Sales on myupgrd</label>
-    <select id="globalRevenue">
-      <option value="100000">$100,000</option>
-      <option value="250000">$250,000</option>
-      <option value="500000">$500,000</option>
-      <option value="1000000">$1,000,000</option>
-      <option value="2500000">$2,500,000</option>
-    </select>
-
-    <button onclick="calculate()">Calculate</button>
-
-    <div class="result" id="result"></div>
+  <div class="form-group">
+    <label for="monthlySales">Your Monthly Product Sales ($)</label>
+    <input type="number" id="monthlySales" value="500" />
   </div>
 
-  <script>
-    function formatUSD(value) {
-      return "$" + Math.floor(value).toLocaleString();
-    }
+  <div class="form-group">
+    <label for="directPromoters">Promoters You Invited Directly</label>
+    <input type="number" id="directPromoters" value="10" />
+  </div>
 
-    function updateBinaryTeamSize() {
-      const binaryDepth = parseInt(document.getElementById("binaryDepth").value) || 0;
-      const teamSize = Math.pow(2, binaryDepth + 1) - 2;
-      document.getElementById("binaryTeamSizeDisplay").value = teamSize.toLocaleString();
-    }
+  <div class="form-group">
+    <label for="avgTeamSales">Average Sales Per Team Member ($)</label>
+    <input type="number" id="avgTeamSales" value="200" />
+  </div>
+
+  <div class="form-group">
+    <label for="depthLevels">Team Levels Below You (Binary System)</label>
+    <input type="number" id="depthLevels" value="1" />
+  </div>
+
+  <div class="form-group">
+    <label for="avgPeoplePerLevel">Avg People per Level</label>
+    <input type="number" id="avgPeoplePerLevel" value="10" />
+  </div>
+
+  <div class="form-group">
+    <label for="rank">Select Your Current myupgrd Rank</label>
+    <select id="rank"></select>
+  </div>
+
+  <div class="form-group">
+    <label>Generation Bonus Values ($ per level)</label>
+    <input type="number" id="gen1" value="50" placeholder="Level 1" />
+    <input type="number" id="gen2" value="40" placeholder="Level 2" />
+    <input type="number" id="gen3" value="30" placeholder="Level 3" />
+    <input type="number" id="gen4" value="20" placeholder="Level 4" />
+    <input type="number" id="gen5" value="10" placeholder="Level 5" />
+    <input type="number" id="gen6" value="5" placeholder="Level 6" />
+    <input type="number" id="gen7" value="2" placeholder="Level 7" />
+  </div>
+
+  <h2>Summary</h2>
+  <div class="result">Direct Commissions: $<span id="directCom"></span></div>
+  <div class="result">Growth Bonus: $<span id="growthBonus"></span></div>
+  <div class="result">Team Bonus: $<span id="teamBonus"></span></div>
+  <div class="result">Generation Bonus: $<span id="genBonus"></span></div>
+  <div class="result">Legacy Pool: $<span id="legacyPool"></span></div>
+  <div class="result">Total Commission: $<span id="totalCom"></span></div>
+
+  <script>
+    const ranks = [
+      { name: 'Seed PROMOTER', direct: 0.00, growth: 0.00, team: 0.00, gen: 0, legacy: 0.00 },
+      { name: 'Blossom PROMOTER', direct: 0.30, growth: 0.10, team: 0.00, gen: 0, legacy: 0.00 },
+      { name: 'Stone PROMOTER', direct: 0.30, growth: 0.10, team: 0.10, gen: 0, legacy: 0.00 },
+      { name: 'Bronze PROMOTER', direct: 0.30, growth: 0.10, team: 0.10, gen: 1, legacy: 0.00 },
+      { name: 'Silver PROMOTER', direct: 0.30, growth: 0.10, team: 0.10, gen: 2, legacy: 0.00 },
+      { name: 'Gold PROMOTER', direct: 0.30, growth: 0.10, team: 0.10, gen: 3, legacy: 0.00 },
+      { name: 'Platinum PROMOTER', direct: 0.30, growth: 0.10, team: 0.10, gen: 4, legacy: 0.00 },
+      { name: 'Diamond PROMOTER', direct: 0.30, growth: 0.10, team: 0.10, gen: 5, legacy: 0.00 },
+      { name: 'Rose LEGEND', direct: 0.30, growth: 0.10, team: 0.10, gen: 6, legacy: 0.00 },
+      { name: 'Palm LEGEND', direct: 0.30, growth: 0.10, team: 0.10, gen: 7, legacy: 0.01 },
+      { name: 'Bamboo LEGEND', direct: 0.30, growth: 0.10, team: 0.10, gen: 7, legacy: 0.02 },
+      { name: 'Jade MASTER', direct: 0.30, growth: 0.10, team: 0.10, gen: 7, legacy: 0.03 },
+      { name: 'Ruby MASTER', direct: 0.30, growth: 0.10, team: 0.10, gen: 7, legacy: 0.04 },
+      { name: 'Pearl MASTER', direct: 0.30, growth: 0.10, team: 0.10, gen: 7, legacy: 0.05 }
+    ];
+
+    const rankSelect = document.getElementById("rank");
+    ranks.forEach((r, i) => {
+      let opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = r.name;
+      rankSelect.appendChild(opt);
+    });
 
     function calculate() {
-      const personalSales = parseFloat(document.getElementById("personalSales").value) || 0;
-      const directPromoters = parseInt(document.getElementById("directPromoters").value) || 0;
-      const avgTeamSales = parseFloat(document.getElementById("avgTeamSales").value) || 0;
-      const binaryDepth = parseInt(document.getElementById("binaryDepth").value) || 0;
-      const avgSponsoredPerMember = parseFloat(document.getElementById("avgSponsoredPerMember").value) || 1;
-      const rank = parseInt(document.getElementById("rank").value);
-      const globalRevenue = parseFloat(document.getElementById("globalRevenue").value) || 0;
+      const monthlySales = parseFloat(document.getElementById("monthlySales").value);
+      const directPromoters = parseFloat(document.getElementById("directPromoters").value);
+      const avgSales = parseFloat(document.getElementById("avgTeamSales").value);
+      const depthLevels = parseInt(document.getElementById("depthLevels").value);
+      const avgPeoplePerLevel = parseFloat(document.getElementById("avgPeoplePerLevel").value);
+      const rank = ranks[parseInt(document.getElementById("rank").value)];
 
-      const generationLevels = {
-  4: [0.20],
-  5: [0.20, 0.15],
-  6: [0.20, 0.15, 0.10],
-  7: [0.20, 0.15, 0.10, 0.05],
-  8: [0.20, 0.15, 0.10, 0.05, 0.05],
-  9: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05],
-  10: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
-  11: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
-  12: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
-  13: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05],
-  15: [0.20, 0.15, 0.10, 0.05, 0.05, 0.05, 0.05]
-};
+      const directCom = monthlySales * rank.direct;
+      const growthBonus = (directPromoters * avgSales) * rank.growth;
+      const teamRevenue = directPromoters * avgSales * Math.pow(2, depthLevels);
+      const teamBonus = teamRevenue * rank.team;
 
-      const legacyRevenueShare = {
-        11: 0.10,
-        12: 0.15,
-        13: 0.20,
-        15: 0.25
-      };
-
-      const directCommission = rank === 1 ? personalSales * 0.15 : personalSales * 0.30;
-      const growthBonus = rank >= 2 ? directPromoters * avgTeamSales * 0.10 : 0;
-
-      let teamBonus = 0;
-      if (rank >= 3) {
-        const binaryTeamSize = Math.pow(2, binaryDepth) - 1;
-        const leftTeam = Math.floor(binaryTeamSize / 2);
-        const rightTeam = binaryTeamSize - leftTeam;
-
-        const leftSales = leftTeam * avgTeamSales;
-        const rightSales = rightTeam * avgTeamSales;
-
-        const cyclesLeft = Math.floor(leftSales / 400);
-        const cyclesRight = Math.floor(rightSales / 600);
-        const cyclesUsed = Math.min(cyclesLeft, cyclesRight);
-        const cappedCycles = Math.min(cyclesUsed, 5000);
-        teamBonus = cappedCycles * 20;
+      let genBonus = 0;
+      for (let i = 1; i <= rank.gen; i++) {
+        const val = parseFloat(document.getElementById(`gen${i}`).value) || 0;
+        genBonus += val;
       }
 
-      let generationBonus = 0;
-      const genLevels = generationLevels[rank] || [];
+      const legacyPool = (depthLevels * avgPeoplePerLevel) * rank.legacy;
+      const total = directCom + growthBonus + teamBonus + genBonus + legacyPool;
 
-      function computeTeamBonus(depth) {
-        const teamSize = Math.pow(avgSponsoredPerMember, depth) - 1;
-        const left = Math.floor(teamSize / 2);
-        const right = teamSize - left;
-        const salesLeft = left * avgTeamSales;
-        const salesRight = right * avgTeamSales;
-        const cyclesL = Math.floor(salesLeft / 400);
-        const cyclesR = Math.floor(salesRight / 600);
-        const used = Math.min(cyclesL, cyclesR);
-        const capped = Math.min(used, 5000);
-        return Math.min(capped * 20, 100000);
-      }
-
-      if (directPromoters > 0) {
-        for (let g = 0; g < genLevels.length; g++) {
-          const promotersAtGen = Math.pow(avgSponsoredPerMember, g);
-          for (let i = 0; i < promotersAtGen; i++) {
-            const availableDepth = binaryDepth - (g + 1);
-            const bonus = computeTeamBonus(availableDepth);
-            generationBonus += bonus * genLevels[g];
-          }
-        }
-      }
-
-      const legacyBonus = legacyRevenueShare[rank] ? globalRevenue * legacyRevenueShare[rank] : 0;
-      const total = directCommission + growthBonus + teamBonus + generationBonus + legacyBonus;
-
-      document.getElementById("result").innerHTML = `
-        <strong>Estimated Monthly Earnings:</strong><br>
-        Direct Commission: ${formatUSD(directCommission)}<br>
-        Growth Bonus: ${formatUSD(growthBonus)}<br>
-        Team Bonus (Capped at $100,000): ${formatUSD(teamBonus)}<br>
-        Generation Bonus: ${formatUSD(generationBonus)}<br>
-        Legacy Pool Bonus: ${formatUSD(legacyBonus)}<br>
-        <hr><strong>Total: ${formatUSD(total)}</strong>
-      `;
+      document.getElementById("directCom").textContent = directCom.toFixed(2);
+      document.getElementById("growthBonus").textContent = growthBonus.toFixed(2);
+      document.getElementById("teamBonus").textContent = teamBonus.toFixed(2);
+      document.getElementById("genBonus").textContent = genBonus.toFixed(2);
+      document.getElementById("legacyPool").textContent = legacyPool.toFixed(2);
+      document.getElementById("totalCom").textContent = total.toFixed(2);
     }
+
+    document.querySelectorAll("input, select").forEach(el => {
+      el.addEventListener("input", calculate);
+    });
+
+    window.onload = calculate;
   </script>
 </body>
 </html>
